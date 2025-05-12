@@ -68,12 +68,19 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 Press:
 
 i - To drive the robot forward.
+
 , - To reverse the robot.
+
 j - To rotate the robot CCW.
+
 l - To rotate the robot CW.
+
 shift + j - To strafe the robot to the left (for mecanum robots).
+
 shift + l - To strafe the robot to the right (for mecanum robots).
+
 u / o / m / . - Used for turning the robot, combining linear velocity x and angular velocity z.
+
 
 **Creating a map**
 

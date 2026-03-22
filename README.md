@@ -2,6 +2,7 @@
 
 Nikiro is a ROS 2-based **Autonomous Mobile Robot (AMR)** designed for indoor navigation using a differential drive system. It leverages **Gazebo, RViz, Nav2, and SLAM Toolbox** for simulation, mapping, localization, and path planning.
 
+> 📹 [Watch full demo on LinkedIn](https://www.linkedin.com/posts/activity-7328418940064280576)
 > Based on [linorobot2](https://github.com/linorobot/linorobot2)
 
 ---

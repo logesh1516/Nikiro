@@ -1,115 +1,150 @@
-# Nikiro
-Nikiro is a ROS 2-based Autonomous Mobile Robot (AMR) platform designed for indoor navigation using a differential drive system. Built with modularity and simulation in mind, Nikiro leverages Gazebo, RViz, and Nav2 for SLAM, localization, and path planning.This is the Slam package of my robot.This repo is based on linorobot2.
+# 🤖 Nikiro AMR
 
-# INSTALLATION
-```
+Nikiro is a ROS 2-based **Autonomous Mobile Robot (AMR)** designed for indoor navigation using a differential drive system. It leverages **Gazebo, RViz, Nav2, and SLAM Toolbox** for simulation, mapping, localization, and path planning.
+
+> Based on [linorobot2](https://github.com/linorobot/linorobot2)
+
+---
+
+## 📦 Related Repositories
+
+| Repository | Description |
+|------------|-------------|
+| [Nikiro_simulation](https://github.com/logesh1516/Nikiro_simulation) | Gazebo simulation environment |
+| [Nikiro_hardware](https://github.com/logesh1516/Nikiro_hardware) | Hardware bringup & microcontroller interface |
+| [Nikiro_docker](https://github.com/logesh1516/Nikiro_docker) | Docker setup for Nikiro |
+
+---
+
+## 🛠️ Tech Stack
+
+![ROS2](https://img.shields.io/badge/ROS2-Humble-blue)
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![C++](https://img.shields.io/badge/C++-17-blue)
+![Gazebo](https://img.shields.io/badge/Gazebo-Fortress-orange)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420)
+
+---
+
+## 🏗️ System Architecture
+
+- **SLAM**: SLAM Toolbox for map generation
+- **Localization**: AMCL via Nav2
+- **Navigation**: Nav2 stack with path planning
+- **LiDAR**: YDLidar X2 (`ydlidar_ros2_driver`)
+- **Drive**: Differential drive with micro-ROS serial interface
+- **URDF**: Custom Xacro model with differential drive plugin
+
+---
+
+## 📸 Robot Model
+
+![Nikiro URDF](https://github.com/user-attachments/assets/1fb7a25f-acb4-4d96-beb2-737281d3180f)
+
+---
+
+## ⚙️ Installation
+
+```bash
 mkdir -p nikiro_amr/src
 cd nikiro_amr/src
 git clone https://github.com/logesh1516/Nikiro.git
 cd ..
-colcon build && source install setup.bash
+colcon build && source install/setup.bash
 ```
-#ENVIRONMENT SETUP
-```
+
+### Environment Setup
+
+```bash
 echo "export NIKIRO_LASER_SENSOR=ydlidar" >> ~/.bashrc
 source ~/.bashrc
 ```
-since i used ydlidar X2 , I used ydlidar_ros2_driver.
 
-# HARDWARE SETUP
+---
 
-https://github.com/logesh1516/Nikiro_hardware.git
+## 🚀 Running the Robot
 
-# URDF
-THis is my custom urdf model , which uses differntial drive .
+### Real Robot
 
-![Screenshot from 2025-05-11 12-57-53](https://github.com/user-attachments/assets/1fb7a25f-acb4-4d96-beb2-737281d3180f)
-
-Custom urdf description can also be used instead of nikiro_description
-
-Your custom urdf can be used by changing in 
+```bash
+ros2 launch nikiro_amr_bringup bringup.launch.py
 ```
+
+Optional parameters:
+- `base_serial_port` — Serial port of microcontroller (default: `/dev/ttyACM0`)
+- `micro_ros_baudrate` — micro-ROS baudrate (default: `115200`)
+
+```bash
+ros2 launch nikiro_amr_bringup bringup.launch.py \
+  base_serial_port:=/dev/ttyUSB0 \
+  micro_ros_baudrate:=921600
+```
+
+### Gazebo Simulation
+
+```bash
+ros2 launch nikiro_description gazebo.launch.py
+```
+
+---
+
+## 🗺️ Mapping & Navigation
+
+### Keyboard Teleoperation
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+| Key | Action |
+|-----|--------|
+| `i` | Drive forward |
+| `,` | Reverse |
+| `j` | Rotate CCW |
+| `l` | Rotate CW |
+| `u` / `o` | Turn (forward + rotate) |
+| `m` / `.` | Turn (reverse + rotate) |
+
+### Create a Map (SLAM)
+
+```bash
+ros2 launch nikiro_amr_navigation slam.launch.py rviz:=true
+```
+
+Move the robot around the environment to generate the map.
+
+### Save the Map
+
+```bash
+cd nikiro/src/nikiro_amr/nikiro_amr_navigation/maps
+ros2 run nav2_map_server map_saver_cli -f <map_name> \
+  --ros-args -p save_map_timeout:=10000
+```
+
+### Run Navigation (Nav2)
+
+```bash
+ros2 launch linorobot2_navigation navigation.launch.py \
+  map:=<map_name.yaml> rviz:=true
+```
+
+Set the **2D Pose Estimate** and **Nav2 Goal** in RViz to start autonomous navigation.
+
+---
+
+## 🔧 Custom URDF
+
+To use your own URDF instead of the default Nikiro description, edit the launch file:
+
+```bash
 cd nikiro_amr/src/nikiro_amr/nikiro_amr_description/launch
 gedit description.launch.py
 ```
-change the the package name to your custom package name and use your **.xacro or .urdf** file in the line **26**
 
-# Booting up the robot
+Change the package name and your `.xacro` or `.urdf` filename at **line 26**.
 
-**Using a real robot:**
-```
-ros2 launch nikiro_amr_bringup bringup.launch.py
-```
-Optional parameters:
+---
 
-base_serial_port - Serial port of the robot's microcontroller. The assumed value is /dev/ttyACM0. Otherwise, change the 
-default value to the correct serial port. For example:
+## 📄 License
 
-```
-ros2 launch nikiro_amr_bringup bringup.launch.py base_serial_port:=/dev/ttyACM1
-```
-
-micro_ros_baudrate - micro-ROS serial baudrate. default 115200.
-
-ros2 launch nikiro_amr_bringup bringup.launch.py base_serial_port:=/dev/ttyUSB0 micro_ros_baudrate:=921600
-
-**Using Gazebo:**
-```
-ros2 launch nikiro_description gazebo.launch.py
-```
-**Controlling the robot**
-
-Keyboard Teleop
-```
-Run teleop_twist_keyboard to control the robot using your keyboard:
-```
-
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-Press:
-
-i - To drive the robot forward.
-
-, - To reverse the robot.
-
-j - To rotate the robot CCW.
-
-l - To rotate the robot CW.
-
-shift + j - To strafe the robot to the left (for mecanum robots).
-
-shift + l - To strafe the robot to the right (for mecanum robots).
-
-u / o / m / . - Used for turning the robot, combining linear velocity x and angular velocity z.
-
-
-**Creating a map**
-
-Run SLAM Toolbox:
-
-ros2 launch nikiro_amr_navigation slam.launch.py rviz:=true
-
-Optional parameters for simulation on host machine:
-
-rviz - Set to true to visualize the robot in RVIZ. Default value is false.
-
-Move the robot to map the environment.
-
-**Save the map**
-```
-cd nikiro/src/nikiro_amr/nikiro_amr_navigation/maps
-ros2 run nav2_map_server map_saver_cli -f <map_name> --ros-args -p save_map_timeout:=10000.
-```
-**Run Nav2 package:**
-```
-ros2 launch linorobot2_navigation navigation.launch.py rviz:=true
-```
-Optional parameter for loading maps:
-
-map - Path to newly created map <map_name.yaml>.
-Optional parameters for simulation on host machine:
-
-rviz - Set to true to visualize the robot in RVIZ. Default value is false.
-
-set the pose estimate and goal postion to perform navigation
-
-
+BSD 3-Clause License — see [LICENSE](LICENSE) for details.

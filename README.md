@@ -24,7 +24,7 @@ Based on [linorobot2](https://github.com/linorobot/linorobot2)
 ![ROS2](https://img.shields.io/badge/ROS2-Humble-blue)
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![C++](https://img.shields.io/badge/C++-17-blue)
-![Gazebo](https://img.shields.io/badge/Gazebo-Fortress-orange)
+![Gazebo](https://img.shields.io/badge/Gazebo-Classic-orange)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420)
 
 ---

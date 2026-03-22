@@ -155,7 +155,3 @@ gedit description.launch.py
 Change the package name and your `.xacro` or `.urdf` filename at **line 26**.
 
 ---
-
-## 📄 License
-
-BSD 3-Clause License — see [LICENSE](LICENSE) for details.

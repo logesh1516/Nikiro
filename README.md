@@ -42,9 +42,9 @@ Based on [linorobot2](https://github.com/linorobot/linorobot2)
 
 ---
 
-## 📸 Robot Model
+## 📸 Nikiro Robot Setup
 
-![Nikiro URDF](https://github.com/user-attachments/assets/1fb7a25f-acb4-4d96-beb2-737281d3180f)
+![Nikiro Robot](https://raw.githubusercontent.com/logesh1516/logesh1516.github.io/b876960b724ccf0016eb4bb326df6378335e26a7/images/Nikiro_original.jpg)
 
 ---
 
